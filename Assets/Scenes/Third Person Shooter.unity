@@ -79740,6 +79740,7 @@ GameObject:
   - component: {fileID: 1822503567}
   - component: {fileID: 1822503566}
   - component: {fileID: 1822503572}
+  - component: {fileID: 1822503574}
   - component: {fileID: 1822503571}
   - component: {fileID: 1822503573}
   - component: {fileID: 1822503570}
@@ -79887,6 +79888,23 @@ MonoBehaviour:
   targetHealthBar: {fileID: 474157256}
   targetResourceBar: {fileID: 1551442933}
   targetTransform: {fileID: 0}
+--- !u!114 &1822503574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1822503565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffdb47a47d3cf144fb12cf7f63b365da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialPositionX: 0
+  initialPositionY: 0
+  distanceX: 0
+  distanceY: 0
+  columnsInARow: 0
 --- !u!1 &1836427395
 GameObject:
   m_ObjectHideFlags: 0
