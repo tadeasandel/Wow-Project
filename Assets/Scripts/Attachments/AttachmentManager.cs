@@ -15,7 +15,7 @@ namespace WoW.Attachments
         public float distanceX;
         public float distanceY;
 
-        public int columnsInARow;
+        public int columnsInARow = 0;
 
         public event Action onBuffChanged;
         public event Action onDebuffChanged;
@@ -44,7 +44,7 @@ namespace WoW.Attachments
         {
             List<Buff> infiniteBuffs = new List<Buff>();
             Dictionary<int, float> durations = new Dictionary<int, float>();
-            Dictionary<float, Buff> durationBuffs = new Dictionary<float, Buff>();
+            List<Buff> durationBuffs = new List<Buff>();
             foreach (Buff buff in currentBuffs)
             {
                 if (buff.isInfinite)
@@ -53,51 +53,40 @@ namespace WoW.Attachments
                 }
                 else
                 {
-                    durationBuffs.Add(buff.attachmentDuration, buff);
+                    durationBuffs.Add(buff);
                 }
             }
-            
-            List<Buff> sortedBuffs = new List<Buff>();
-            float previoustimer = 0;
-            Buff previousBuff;
-            TimerResult smallResult;
-            TimerResult previousResult;
-            foreach (KeyValuePair<float,Buff> buff1 in durationBuffs)
-            {
-                foreach (KeyValuePair<float, Buff> buff2 in durationBuffs)
-                {
-                    if(buff1.Value == buff2.Value)
-                    {
-                        continue;
-                    }
-                    smallResult = CompareDebuffLengths(buff1.Value,buff2.Value);
-                }
-            }
-        }
-        public struct TimerResult
-        {
-            AttachmentBase winner;
-            AttachmentBase looser;
-            public TimerResult(AttachmentBase w, AttachmentBase l)
-            {
-                winner = w;
-                looser = l;
-            }
-        }
 
-        private TimerResult CompareDebuffLengths(AttachmentBase a, AttachmentBase b)
-        {
-            if (a.attachmentDuration > b.attachmentDuration)
+            List<Buff> sortedBuffs = new List<Buff>();
+            foreach (Buff buff in infiniteBuffs)
             {
-                return new TimerResult(a,b);
+                sortedBuffs.Add(buff);
             }
-            else if (a.attachmentDuration < b.attachmentDuration)
+            float currentSmallestDebuff = Mathf.Infinity;
+            int currentSmallestIndex = 0;
+            for (int i = 0; i < durationBuffs.Count; i++)
             {
-                return new TimerResult(b,a);
+                for (int y = 0; i < durationBuffs.Count; y++)
+                {
+                    if (currentSmallestDebuff > durationBuffs[y].attachmentDuration)
+                    {
+                        currentSmallestDebuff = durationBuffs[y].attachmentDuration;
+                        currentSmallestIndex = y;
+                    }
+                }
+                sortedBuffs.Add(durationBuffs[currentSmallestIndex]);
+                durationBuffs.RemoveAt(currentSmallestIndex);
             }
-            else
+            float floatedSortedBuffsCount = sortedBuffs.Count;
+            float floatedColumnsInARow = columnsInARow;
+            int numberOfRows = (int)Math.Floor(floatedSortedBuffsCount / floatedColumnsInARow);
+            for (int i = 0; i < numberOfRows; i++)
             {
-                return new TimerResult();
+                for (int y = 0; y < columnsInARow; y++)
+                {
+                    Vector3 newUiPosition = new Vector3(distanceX * y, distanceY * i, 1);
+                    sortedBuffs[columnsInARow].transform.position = newUiPosition;
+                }
             }
         }
 

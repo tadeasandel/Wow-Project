@@ -11,5 +11,18 @@ namespace WoW.Attachments
         public float attachmentDuration;
         public bool isStackable;
         public bool isInfinite;
+        private float _uIXPosition;
+        public float UIXPosition
+        {
+            get
+            {
+                return _uIXPosition;
+            }
+            set
+            {
+                _uIXPosition = value;
+            }
+        }
+        public float uIYPosition;
     }
 }
