@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using System;
 
 namespace WoW.Attachments
 {
+    [Serializable]
     public class AttachmentBase : MonoBehaviour
     {
         public string attachmentName;
@@ -11,18 +14,9 @@ namespace WoW.Attachments
         public float attachmentDuration;
         public bool isStackable;
         public bool isInfinite;
-        private float _uIXPosition;
-        public float UIXPosition
-        {
-            get
-            {
-                return _uIXPosition;
-            }
-            set
-            {
-                _uIXPosition = value;
-            }
-        }
+        public float uIXPosition;
         public float uIYPosition;
+        public float pandemicPercentage;
+        public Image attachmentImage;
     }
 }

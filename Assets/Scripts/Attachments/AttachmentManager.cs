@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using WoW.Attachments.Buffs;
 using WoW.Attachments.Debuffs;
+using WoW.UI.Attachments;
 
 namespace WoW.Attachments
 {
@@ -20,8 +21,15 @@ namespace WoW.Attachments
         public event Action onBuffChanged;
         public event Action onDebuffChanged;
 
-        List<Buff> currentBuffs = new List<Buff>();
-        List<Debuff> currentDebuffs = new List<Debuff>();
+        public List<Buff> currentBuffs = new List<Buff>();
+        public List<Debuff> currentDebuffs = new List<Debuff>();
+
+        AttachmentUIManager attachmentUIManager;
+
+        private void Awake()
+        {
+            attachmentUIManager = FindObjectOfType<AttachmentUIManager>();
+        }
 
         private void OnEnable()
         {
@@ -45,6 +53,7 @@ namespace WoW.Attachments
             List<Buff> infiniteBuffs = new List<Buff>();
             Dictionary<int, float> durations = new Dictionary<int, float>();
             List<Buff> durationBuffs = new List<Buff>();
+            // sort infinite and timer based buffs
             foreach (Buff buff in currentBuffs)
             {
                 if (buff.isInfinite)
@@ -58,10 +67,12 @@ namespace WoW.Attachments
             }
 
             List<Buff> sortedBuffs = new List<Buff>();
+            // add infinite buffs first to sortedbuffs list
             foreach (Buff buff in infiniteBuffs)
             {
                 sortedBuffs.Add(buff);
             }
+            // sort timer based buffs from lowest to highest
             float currentSmallestDebuff = Mathf.Infinity;
             int currentSmallestIndex = 0;
             for (int i = 0; i < durationBuffs.Count; i++)
@@ -84,10 +95,11 @@ namespace WoW.Attachments
             {
                 for (int y = 0; y < columnsInARow; y++)
                 {
-                    Vector3 newUiPosition = new Vector3(distanceX * y, distanceY * i, 1);
-                    sortedBuffs[columnsInARow].transform.position = newUiPosition;
+                    sortedBuffs[columnsInARow].uIXPosition = initialPositionX + distanceX * y;
+                    sortedBuffs[columnsInARow].uIYPosition = initialPositionY + distanceY * i;
                 }
             }
+            attachmentUIManager.RefreshBuffs(sortedBuffs);
         }
 
         public void AddBuff(Buff buff)
